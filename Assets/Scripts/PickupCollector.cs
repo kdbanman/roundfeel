@@ -3,8 +3,9 @@ using System.Collections;
 
 public class PickupCollector : MonoBehaviour {
     void OnTriggerEnter(Collider other) {
-        if (other.gameObject.tag == "Collectable") {
-            Destroy(other.gameObject);
+        var collectable = other.gameObject.GetComponent<Collectable>();
+        if (collectable != null) {
+            collectable.Collect();
         }
     }
 }

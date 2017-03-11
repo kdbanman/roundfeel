@@ -4,23 +4,35 @@ using System.Collections;
 public class PickupCreator : MonoBehaviour {
 
     public Object pickupPrefab;
-    public int numPickups;
-    public float pickupRadius;
+    public Material deadMaterial;
+
+    public float pickupHeight;
+    public float pickupSeparation;
+    public float innerPickupRadius;
+    public float outerPickupRadius;
 
     void Start () {
-        for (int i = 0; i < numPickups; i++) {
+        float pickupRadius = innerPickupRadius;
+        while (pickupRadius < outerPickupRadius) {
+            float circumference = 2 * Mathf.PI * pickupRadius;
+            int numPickups = (int)Mathf.Floor(circumference / pickupSeparation);
 
-            var rads = 2 * Mathf.PI * (float)i / (float)numPickups;
+            for (int i = 0; i < numPickups; i++) {
 
-            GameObject obj = (GameObject)Instantiate(pickupPrefab);
+                var rads = 2 * Mathf.PI * (float)i / (float)numPickups;
 
-            var x = pickupRadius * Mathf.Cos(rads);
-            var z = pickupRadius * Mathf.Sin(rads);
+                GameObject obj = (GameObject)Instantiate(pickupPrefab);
 
-            obj.transform.position = new Vector3(x, 0.25f, z);
-            obj.transform.rotation = Random.rotation;
-            obj.GetComponent<Rotator>().rotationRate = Random.Range(0.8f, 1.9f);
+                var x = pickupRadius * Mathf.Cos(rads);
+                var z = pickupRadius * Mathf.Sin(rads);
+
+                obj.transform.position = new Vector3(x, pickupHeight, z);
+                obj.transform.rotation = Random.rotation;
+                obj.GetComponent<Collectable>().rotationRate = Random.Range(0.8f, 1.9f);
+                obj.GetComponent<Collectable>().deadMaterial = deadMaterial;
+            }
+
+            pickupRadius += pickupSeparation;
         }
     }
-
 }
