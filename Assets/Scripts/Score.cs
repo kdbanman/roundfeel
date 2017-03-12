@@ -8,38 +8,39 @@ public class Score : MonoBehaviour {
     public Text scoreText;
     public Text winText;
 
-    private HashSet<string> shownMessages = new HashSet<string>();
+    private Dictionary<int, string> messages;
 
     void Start() {
         score = 0;
         SetScoreText();
         winText.enabled = false;
+
+        messages = new Dictionary<int, string>();
+        messages.Add(1000, "Wow a thousand points.");
+        messages.Add(2000, "You fucking did it.");
+        messages.Add(3000, "Do you feel better now?");
     }
 
     public void AddPoints(int points) {
         score += points;
         SetScoreText();
 
-        if (score >= 1000) {
-            StartCoroutine(ShowMessage("Wow a thousand points.", 3.0f));
+        int lastThousandScorePassed = Mathf.FloorToInt((float)score / 1000f) * 1000;
+        if (messages.ContainsKey(lastThousandScorePassed)) {
+            StartCoroutine(ShowMessage(messages[lastThousandScorePassed], 3.0f));
+            messages.Remove(lastThousandScorePassed);
         }
-        else if (score >= 2000) {
-            StartCoroutine(ShowMessage("You fucking did it.", 3.0f));
-        }
-        else if (score >= 3000) {
-            StartCoroutine(ShowMessage("Do you feel better now?", 3.0f));
+
+        if (score >= 3000) {
             gameObject.GetComponent<Stickable>().isSticky = true;
         }
     }
 
     IEnumerator ShowMessage(string message, float seconds) {
-        if (!shownMessages.Contains(message)) {
-            shownMessages.Add(message);
-            winText.text = message;
-            winText.enabled = true;
-            yield return new WaitForSeconds(seconds);
-            winText.enabled = false;
-        }
+        winText.text = message;
+        winText.enabled = true;
+        yield return new WaitForSeconds(seconds);
+        winText.enabled = false;
     }
 
     private void SetScoreText() {
