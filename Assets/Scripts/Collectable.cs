@@ -7,18 +7,22 @@ public class Collectable : MonoBehaviour {
 
     private bool collected = false;
 
-    void Setup () {
+    void Setup() {
         var rigidBody = GetComponent<Rigidbody>();
         rigidBody.isKinematic = true;
     }
 
-    void Update () {
+    void Update() {
         if (!collected) {
             transform.Rotate(new Vector3( 10, 20, 40) * rotationRate * Time.deltaTime);
         }
     }
 
-    public int Collect () {
+    public int Collect() {
+        if (collected) {
+            return 0;
+        }
+
         collected = true;
 
         var rigidBody = GetComponent<Rigidbody>();
@@ -28,6 +32,8 @@ public class Collectable : MonoBehaviour {
         collider.isTrigger = false;
 
         GetComponent<Renderer>().material = deadMaterial;
+
+        GetComponent<Stickable>().isSticky = true;
 
         return 8;
     }
