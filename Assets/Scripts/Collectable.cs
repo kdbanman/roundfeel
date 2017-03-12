@@ -10,10 +10,6 @@ public class Collectable : MonoBehaviour {
     void Setup () {
         var rigidBody = GetComponent<Rigidbody>();
         rigidBody.isKinematic = true;
-
-        if (deadMaterial == null) {
-            deadMaterial = (Material)Resources.Load("Materials/Dead Pickup", typeof(Material));
-        }
     }
 
     void Update () {
