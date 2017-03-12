@@ -8,26 +8,37 @@ public class Score : MonoBehaviour {
     public Text scoreText;
     public Text winText;
 
+    private HashSet<string> shownMessages = new HashSet<string>();
+
     void Start() {
         score = 0;
         SetScoreText();
-        winText.text = "";
+        winText.enabled = false;
     }
 
     public void AddPoints(int points) {
         score += points;
         SetScoreText();
 
-        winText.text = "";
-        if (score >= 1000 && score <= 1200) {
-            winText.text = "Wow a thousand points.";
+        if (score >= 1000) {
+            StartCoroutine(ShowMessage("Wow a thousand points.", 3.0f));
         }
-        else if (score >= 2000 && score <= 2200) {
-            winText.text = "You fucking did it.";
+        else if (score >= 2000) {
+            StartCoroutine(ShowMessage("You fucking did it.", 3.0f));
         }
         else if (score >= 3000) {
-            winText.text = "Do you feel better now?";
+            StartCoroutine(ShowMessage("Do you feel better now?", 3.0f));
             gameObject.GetComponent<Stickable>().isSticky = true;
+        }
+    }
+
+    IEnumerator ShowMessage(string message, float seconds) {
+        if (!shownMessages.Contains(message)) {
+            shownMessages.Add(message);
+            winText.text = message;
+            winText.enabled = true;
+            yield return new WaitForSeconds(seconds);
+            winText.enabled = false;
         }
     }
 

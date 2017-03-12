@@ -33,8 +33,9 @@ public class Stickable : MonoBehaviour {
         springJoint.damper = 1.5f;
         springJoint.spring = 0f;
         springJoint.enableCollision = true;
-        //springJoint.minDistance = collisionDistance * 0.95f;
+        springJoint.minDistance = 0f;
         springJoint.maxDistance = collisionDistance * 1.05f;
+        springJoint.tolerance = 1f;
 
 
         springJoint.connectedBody = stickable.GetComponent<Rigidbody>();

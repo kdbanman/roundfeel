@@ -13,7 +13,7 @@ public class CameraController : MonoBehaviour {
 
     void LateUpdate () {
         var playerPositionDelta = player.transform.position - lastPlayerPosition;
-        playerPositionDelta.Scale(new Vector3(0.1f, 0.1f, 0.1f));
+        playerPositionDelta.Scale(new Vector3(0.1f, 0, 0.1f));
 
         transform.position = transform.position + playerPositionDelta;
 
